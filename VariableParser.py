@@ -32,7 +32,7 @@ class VariableParser:
 
         return correct
 
-    def set_variable_type(self, value: str) -> bool | int | float | str:
+    def set_variable_type(self, value: str) -> bool | int:
         if value.isdigit():
             return int(value)
         if value.replace(".", "", 1).isdigit():
