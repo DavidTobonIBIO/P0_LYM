@@ -1,8 +1,7 @@
-from RobotParser import RobotParser
 from VariableParser import VariableParser
 
 
-class CommandsParser:
+class CommandParser:
     def __init__(self, variableParser: VariableParser):
         self.simple_commands = ["MOVE", "SKIP", "TURN", "FACE"]
         self.commands = ["PUT", "PICK", "MOVE-DIR", "MOVE-FACE", "RUN-DIRS"]

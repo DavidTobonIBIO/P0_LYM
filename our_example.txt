@@ -1,0 +1,2 @@
+(defvar xd 0)
+(= xd 1)

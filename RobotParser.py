@@ -1,49 +1,18 @@
 import re
 from VariableParser import VariableParser
 from FunctionParser import FunctionParser
-from CommandParser import CommandsParser
-
+from CommandParser import CommandParser
+from ParenthesisParser import ParenthesisParser
+from constants import VALID_SYMBOLS
 
 class RobotParser:
-
-    KEYWORDS: set = {
-        "DEFVAR",
-        "DEFUN",
-        "MOVE",
-        "SKIP",
-        "TURN",
-        "NULL",
-        "PUT",
-        "PICK",
-        "MOVE-DIR",
-        "MOVE-FACE",
-        "RUN-DIRS",
-        ":FRONT",
-        ":RIGHT",
-        ":LEFT",
-        ":BACK",
-        ":NORTH",
-        ":SOUTH",
-        ":EAST",
-        ":WEST",
-    }
-
-    CONSTANTS: set = {
-        "DIM",
-        "MYXPOS",
-        "MYYPOS",
-        "MYCHIPS",
-        "MYBALLOONS",
-        "BALLOONSHERE",
-        "CHIPSHERE",
-        "SPACES",
-    }
 
     VALID_TYPES: set = {bool, int}
 
     def __init__(self) -> None:
+        self.parenthesisParser = ParenthesisParser()
         self.variableParser = VariableParser()
-        self.commandsParser = CommandsParser(self.variableParser)
+        self.commandsParser = CommandParser(self.variableParser)
         self.functionParser = FunctionParser(self.variableParser)
 
     def tokenize(self, program: str) -> list[str]:
@@ -56,13 +25,44 @@ class RobotParser:
         Returns:
             list[str]: Una lista de tokens extraídos de la cadena de programa.
         """
-        tokens = re.findall(r"\(|\)|[^\s()]+", program.lower())
+        tokens = re.findall(r"\(|\)|[^\s()]+", program.upper())
         return tokens
 
     def parse(self, program: str) -> bool:
-        tokens = self.tokenize(program)
-        correct = True
+        tokens: list[str] = self.tokenize(program)
+        print(tokens)
+        correct = False
+        if self.parenthesisParser.parse(tokens):
+            correct = True
+            i = 0
+            while correct and (i < len(tokens)):
+                if (tokens[i].isalnum()):
+                    if self.isVariableDef(tokens[i]):
+                        words = tokens[i-1:i+4]
+                        correct = self.variableParser.parse_declaraction(words)
+                        i += 4
+                # elif (not tokens[i].isalnum()) and (tokens[i] in VALID_SYMBOLS):
+                #     if self.isVariableAssignment(tokens[i]):
+                #         words = tokens[i-1:i+4]
+                #         print(words)
+                #         correct = self.variableParser.parse_assignment(words)
+                #         i += 4
+                # TODO: evaluar asignacion de variables
+                else:
+                    correct = False
+                i += 1
         return correct
+    
+    def isVariableDef(self, word):
+        if word == 'DEFVAR':
+            return True
+        return False
+            
+    
+    def isVariableAssignment(self, word):
+        if word == '=':
+            return True
+        return False
 
 
 def main():

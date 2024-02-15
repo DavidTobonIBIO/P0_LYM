@@ -1,6 +1,5 @@
-from RobotParser import RobotParser
 from VariableParser import VariableParser
-
+from constants import KEYWORDS, CONSTANTS
 
 class FunctionParser:
     def __init__(self, variableParser: VariableParser):
@@ -14,7 +13,7 @@ class FunctionParser:
             correct = False
         elif words[0] != "DEFUN":
             correct = False
-        elif (words[1] in RobotParser.KEYWORDS) or (words[1] in RobotParser.CONSTANTS):
+        elif (words[1] in KEYWORDS) or (words[1] in CONSTANTS):
             correct = False
         elif words[2].startswith("(") and words[2].endswith(")"):
             params = words[2].split(",")
