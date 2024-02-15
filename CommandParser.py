@@ -1,12 +1,8 @@
 from VariableParser import VariableParser
-from constants import CONSTANTS, ITEMS, ORIENTATIONS
+from constants import CONSTANTS, ITEMS, ORIENTATIONS, RUN_DIRECTIONS, TURN_DIRECTIONS
 
 class CommandParser:
     def __init__(self, variableParser: VariableParser):
-        self.simple_commands = ["MOVE", "SKIP", "TURN", "FACE"]
-        self.commands = ["PUT", "PICK", "MOVE-DIR", "MOVE-FACE", "RUN-DIRS"]
-        self.run_directions = [":FRONT", ":RIGHT", ":LEFT", ":BACK"]
-        self.turn_directions = [":LEFT", ":RIGHT", ":AROUND"]
         self.variableParser = variableParser
 
     def parse_action(self, words: list[str]) -> bool:
@@ -33,7 +29,7 @@ class CommandParser:
                     or (words[2] in CONSTANTS)
                 ):
                     correct = True
-            elif (words[1] == "TURN") and (words[2] in self.turn_directions):
+            elif (words[1] == "TURN") and (words[2] in TURN_DIRECTIONS):
                 correct = True
             elif (words[1] == "FACE") and (words[2] in ORIENTATIONS):
                 correct = True
@@ -52,12 +48,12 @@ class CommandParser:
             if words[1] == "MOVE-DIR":
                 if (
                     words[2].isdigit() or words[2] in self.variableParser.declared_variables
-                ) and (words[3] in self.run_directions):
+                ) and (words[3] in RUN_DIRECTIONS):
                     correct = True
             elif words[1] == "MOVE-FACE":
                 if (
                     words[2].isdigit() or words[2] in self.variableParser.declared_variables
-                ) and (words[3] in self.orientations):
+                ) and (words[3] in ORIENTATIONS):
                     correct = True
     
         return correct
@@ -66,6 +62,6 @@ class CommandParser:
     def parse_run_dirs_command(self, words: list[str]) -> bool:
         correct = False
         if (words[0] == '(') and (words[-1] == ')') and (words[1] == "RUN-DIRS"):
-            if all(d in self.run_directions for d in words[2:-1]):
+            if all(d in RUN_DIRECTIONS for d in words[2:-1]):
                 correct = True
         return correct

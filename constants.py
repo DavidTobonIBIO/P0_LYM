@@ -68,3 +68,7 @@ CONDITIONALS: set = {
 ITEMS: set = {":BALLOONS", ":CHIPS"}
 
 ORIENTATIONS: set = {":NORTH", ":SOUTH", ":EAST", ":WEST"}
+
+RUN_DIRECTIONS: set = {":FRONT", ":RIGHT", ":LEFT", ":BACK"}
+
+TURN_DIRECTIONS: set = {":LEFT", ":RIGHT", ":AROUND"}
