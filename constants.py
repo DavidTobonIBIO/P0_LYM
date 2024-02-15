@@ -18,6 +18,14 @@ KEYWORDS: set = {
     ":SOUTH",
     ":EAST",
     ":WEST",
+    "IF",
+    "FACING?",
+    "BLOCKED?",
+    "CAN-PUT?",
+    "CAN-PICK?",
+    "CAN-MOVE?",
+    "ISZERO?",
+    "NOT",
 }
 
 
@@ -32,9 +40,31 @@ CONSTANTS: set = {
     "SPACES",
 }
 
-VALID_SYMBOLS: set = {
-    ':',
-    '-',
-    '?',
-    '='
+VALID_SYMBOLS: set = {":", "-", "?", "="}
+
+MOVE_COMMANDS: set = {
+    "MOVE",
+    "SKIP",
+    "TURN",
+    "FACE",
+    "PUT",
+    "PICK",
+    "MOVE-DIR",
+    "MOVE-FACE",
+    "RUN-DIRS",
 }
+
+CONDITIONALS: set = {
+    "IF",
+    "FACING?",
+    "BLOCKED?",
+    "CAN-PUT?",
+    "CAN-PICK?",
+    "CAN-MOVE?",
+    "ISZERO?",
+    "NOT",
+}
+
+ITEMS: set = {":BALLOONS", ":CHIPS"}
+
+ORIENTATIONS: set = {":NORTH", ":SOUTH", ":EAST", ":WEST"}

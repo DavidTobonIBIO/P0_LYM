@@ -1,2 +1,8 @@
 (defvar xd 0)
-(= xd 1)
+(   (put :chips xd)
+    (put :balloons 5)
+    (move rotate 3)
+(turn :left)
+(run-dirs   :left :up :left :down :right)
+ (pick :balloons balloonsHere))
+

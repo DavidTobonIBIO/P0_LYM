@@ -3,17 +3,16 @@ from constants import KEYWORDS, CONSTANTS
 
 class VariableParser:
     def __init__(self):
-        self.valid_types: set = {bool, int}
         self.declared_variables: dict = {}
 
-    def parse_declaraction(self, words: list[str]) -> bool:
+    def parse_definition(self, words: list[str]) -> bool:
         correct = True
 
         if len(words) != 5:
             correct = False
         elif (words[2] in KEYWORDS) or (words[2] in CONSTANTS) or (not words[2].isalnum()):
             correct = False
-        elif (words[1] == "DEFVAR") and (type(words[3]) in self.valid_types) and (words[0] == '(' and words[-1] == ')'):
+        elif (words[1] == "DEFVAR") and (words[0] == '(' and words[-1] == ')'):
             self.declared_variables[words[2]] = self.set_variable_type(words[3])
 
         return correct
@@ -25,7 +24,7 @@ class VariableParser:
             correct = False
         elif words[2] not in self.declared_variables:
             correct = False
-        elif (words[1] == "=") and (type(words[3]) in self.valid_types) and (words[0] == '(' and words[-1] == ')'):
+        elif (words[1] == "=") and (words[0] == '(' and words[-1] == ')'):
             self.declared_variables[words[2]] = words[3]
 
         return correct

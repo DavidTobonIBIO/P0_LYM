@@ -1,21 +1,30 @@
 from VariableParser import VariableParser
+from Function import Function
 from constants import KEYWORDS, CONSTANTS
 
 class FunctionParser:
     def __init__(self, variableParser: VariableParser):
         self.variableParser = variableParser
+        self.functions: dict[str, list[str]] = {}
 
-    def parse_declaraction(self, line: str) -> bool:
+    def parse_definition(self, words: list[str]) -> bool:
         correct = True
-        words = line.strip().split(" ")
 
-        if len(words) < 4:
+        if len(words) < 6:
             correct = False
-        elif words[0] != "DEFUN":
-            correct = False
-        elif (words[1] in KEYWORDS) or (words[1] in CONSTANTS):
-            correct = False
-        elif words[2].startswith("(") and words[2].endswith(")"):
-            params = words[2].split(",")
+        if (words[0] == '(') and (words[-1] == ')'):
+            if words[1] != "DEFUN":
+                correct = False
+            elif (words[2] in KEYWORDS) or (words[2] in CONSTANTS) or (words[2] in self.variableParser.declared_variables):
+                correct = False
+            elif (words[3] == "("):
+                fun_name = words[2]
+                j = 4
+                params = []
+                while (j < len(words)) and (words[j] != ')'):
+                    params.append(words[j])
+                    j += 1
+                    
+                self.functions[fun_name] = params
 
         return correct
