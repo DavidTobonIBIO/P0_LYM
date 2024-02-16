@@ -49,3 +49,5 @@ class ConditionalParser:
                 or (words[2] in self.variableParser.declared_variables)
                 or (words[2] in CONSTANTS)
             )
+        
+    

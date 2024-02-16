@@ -16,7 +16,7 @@ class RobotParser:
         self.variableParser = VariableParser()
         self.commandsParser = CommandParser(self.variableParser)
         self.conditionalParser = ConditionalParser(self.variableParser)
-        self.functionParser = FunctionParser(self.variableParser, self.commandsParser)
+        ##self.functionParser = FunctionParser(self.variableParser, self.commandsParser)
 
     def tokenize(self, program: str) -> list[str]:
         """
@@ -35,40 +35,30 @@ class RobotParser:
         tokens: list[str] = self.tokenize(program)
         print(tokens)
         correct = False
-        if self.parenthesisParser.parse(tokens):
+        if self.parenthesisParser.parse(tokens) and tokens[0] == '(':
             correct = True
-            i = 0
-            
-            while correct and (i < len(tokens)):
-                if (tokens[i].isalnum()) or (tokens[i] in MOVE_COMMANDS):
-                    if self.isVariableDef(tokens[i]):
-                        words = tokens[i - 1 : i + 4]
-                        correct = self.variableParser.parse_definition(words)
-                        i += 4
+            stack = [tokens[0]]
+            i = 1
+            length = len(tokens)
+            while correct and (i < length):
+                if tokens[i] == '(':
+                    stack.append(i)
+                elif tokens[i] == ')':
+                    start = stack.pop()+1
+                    end = i
+                    if (not (tokens[start] == '(')) and (not (tokens[start] == ')')):
+                        if (tokens[start].isalnum()) or (tokens[start] in MOVE_COMMANDS):
+                            if self.isVariableDef(tokens[start]):
+                                words = tokens[start - 1 : end+1]
+                                correct = self.variableParser.parse_definition(words)
+                                
+                            elif self.isCommand(tokens[start]):
+                                print(tokens[start])
+                                correct = self.commandsParser.parse_action(tokens[start-1:end+1])
+                            
                         
-                    elif self.isCommand(tokens[i]):
-                        j = i
-                        while tokens[j] != ')':
-                            j += 1
-                        correct = self.commandsParser.parse_action(tokens[i-1:j+1])
-                        i += j+1
-                    elif self.isConditional(tokens[i]):
-                        j = i
-                        while tokens[j] != ')':
-                            j += 1
-                        correct = self.conditionalParser.parse(tokens[i-1:j+1])
-                        i += j+1
-                    # elif self.isFunction(tokens[i]):
-                    #     correct = self.functionParser.parse_definition()
-
-                elif (not tokens[i].isalnum()) and (tokens[i] in VALID_SYMBOLS):
-                    if self.isVariableAssignment(tokens[i]):
-                        words = tokens[i-1:i+4]
-                        correct = self.variableParser.parse_assignment(words)
-                        i += 4
-                    else:
-                        correct = False
-                i += 1
+                        
+            
         return correct
 
     def isVariableDef(self, word):
