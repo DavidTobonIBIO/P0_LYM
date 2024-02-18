@@ -5,34 +5,26 @@ class VariableParser:
     def __init__(self):
         self.declared_variables: dict = {}
 
-    def parse_definition(self, words: list[str]) -> tuple[bool, str | None, str | int | None]:
+    def parse_definition(self, words: list[str]) -> bool:
         correct = True
-        name: str | None = None
-        value: str | int | None = None
         if len(words) != 5:
             correct = False
         elif (words[2] in KEYWORDS) or (words[2] in CONSTANTS) or (not words[2].isalnum()):
             correct = False
         elif (words[1] == "DEFVAR") and (words[0] == '(' and words[-1] == ')'):
             self.declared_variables[words[2]] = words[3]
-            name = words[2]
-            value = words[3]
-        return correct, name, value
+        return correct
 
-    def parse_assignment(self, words: list[str]) -> tuple [bool, str | None, str | int | None]:
+    def parse_assignment(self, words: list[str]) -> bool:
         correct = True
-        name: str | None = None
-        value: str | int | None = None
         if len(words) != 5:
             correct = False
         elif words[2] not in self.declared_variables:
             correct = False
         elif (words[1] == "=") and (words[0] == '(' and words[-1] == ')'):
             self.declared_variables[words[2]] = words[3]
-            name = words[2]
-            value = words[3]
 
-        return correct, name, value
+        return correct
 
     # def set_variable_type(self, value: str) -> bool | int:
     #     if value.isdigit():

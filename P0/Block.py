@@ -1,16 +1,13 @@
 class Block:
-    def __init__(self, content_type, content, children=[]):
+    def __init__(self, content_type, content: list[str], children=[]):
         self.content_type: str = content_type
         self.content = content
-        # if parent is None:
-        #     self.parent = Block()
-        # else:
-        #     self.parent = parent
         self.children: list[Block] = children
         
-    def addChild(self, child):
+    def add_child(self, child):
         self.children.append(child)
-        # child.parent = self
+        # print(f"Parent: {self.content}")
+        # print(f"Added child {child.content}")
         
     def __str__(self):
         return f"Block: {self.content_type}, children: {[child.content_type for child in self.children]}"
