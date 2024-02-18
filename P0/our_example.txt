@@ -1,5 +1,10 @@
-(defvar rotate 3)
-((defvar one 1)
-(= one 1))
+(
+    (move 1)
+    (move 2)
+    (
+        (move 3) (move 4) (move 5)
+    )
+)
 
 
+(if (blocked?) (skip 0) (move 1) )

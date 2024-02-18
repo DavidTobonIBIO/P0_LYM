@@ -55,12 +55,12 @@ class CommandParser:
             if words[1] in ["PUT", "PICK"]:
                 if (words[2] in ITEMS) and (
                     (words[3].isdigit())
-                    or (words[3] in self.variableParser.declared_variables)
+                    or (words[3] in self.variableParser.declared_variables or words[3] in CONSTANTS)
                 ):
                     correct = True
                     command_type = words[1]
                     params = (words[2], words[3])
-            if words[1] == "MOVE-DIR":
+            elif words[1] == "MOVE-DIR":
                 if (
                     words[2].isdigit() or words[2] in self.variableParser.declared_variables
                 ) and (words[3] in RUN_DIRECTIONS):

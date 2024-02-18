@@ -1,7 +1,11 @@
 class Block:
-    def __init__(self, content_type, parent=None, children=[]):
+    def __init__(self, content_type, content, children=[]):
         self.content_type: str = content_type
-        # self.parent: Block = parent
+        self.content = content
+        # if parent is None:
+        #     self.parent = Block()
+        # else:
+        #     self.parent = parent
         self.children: list[Block] = children
         
     def addChild(self, child):
@@ -9,7 +13,7 @@ class Block:
         # child.parent = self
         
     def __str__(self):
-        return f"Block: {self.content_type}, children: {self.children}"
+        return f"Block: {self.content_type}, children: {[child.content_type for child in self.children]}"
     
     def __repr__(self):
-        return f"Block: {self.content_type}, children: {self.children}"
+        return f"Block: {self.content_type}, children: {[child.content_type for child in self.children]}"

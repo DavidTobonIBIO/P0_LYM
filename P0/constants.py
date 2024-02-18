@@ -26,7 +26,7 @@ KEYWORDS: set = {
     "CAN-MOVE?",
     "ISZERO?",
     "NOT",
-    "LOOP"
+    "LOOP",
 }
 
 
@@ -56,7 +56,6 @@ MOVE_COMMANDS: set = {
 }
 
 CONDITIONALS: set = {
-    "IF",
     "FACING?",
     "BLOCKED?",
     "CAN-PUT?",
@@ -73,3 +72,20 @@ ORIENTATIONS: set = {":NORTH", ":SOUTH", ":EAST", ":WEST"}
 RUN_DIRECTIONS: set = {":FRONT", ":RIGHT", ":LEFT", ":BACK"}
 
 TURN_DIRECTIONS: set = {":LEFT", ":RIGHT", ":AROUND"}
+
+INSTRUCTION_CREATORS: set = {
+    "DEFVAR",
+    "DEFUN",
+    "=",
+    "MOVE",
+    "SKIP",
+    "TURN",
+    "NULL",
+    "PUT",
+    "PICK",
+    "MOVE-DIR",
+    "MOVE-FACE",
+    "RUN-DIRS",
+    "LOOP",
+    "REPEAT"
+}
