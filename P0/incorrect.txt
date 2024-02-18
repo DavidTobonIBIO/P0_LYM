@@ -1,0 +1,13 @@
+(defvar rotate 3)
+(defun blocked? ()
+    (not (can-move? :north )))
+
+(if (blocked?) (move 1) (skip))
+
+(if (blocked?) ((defvar rotate 3) (defvar rot 3)))
+
+                     /\   
+                   if  defvar
+                    /\
+               block
+[Conditional, Block, , ]

@@ -1,0 +1,5 @@
+(defvar rotate 3)
+((defvar one 1)
+(= one 1))
+
+

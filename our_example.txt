@@ -1,9 +1,0 @@
-(defvar xd 0)
-(  (put :chips xd)
-    (put :balloons 5)
-    (move rotate 3)
-(turn :left)
-(run-dirs   :left :up :left :down :right)
- (pick :balloons balloonsHere))
- (if (blocked?) (move 1) (skip))
-
