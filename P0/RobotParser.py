@@ -73,9 +73,8 @@ class RobotParser:
                     if self.correct:
                         tree = {new_block : {}}
                         self.new_block_parser(tokens, block_coords, tree)
-                        self.correct = self.check_conditionals(tree, new_block)
-                        self.correct = self.check_loop(tree, new_block)
-                        print(tree)
+                        if self.correct:
+                            self.correct = self.check_conditionals_and_loops(tree)
                 i += 1
         return self.correct
 
@@ -115,9 +114,7 @@ class RobotParser:
             if not is_child:
                 tree[new_block] = {}
             self.new_block_parser(tokens, block_coords, tree)
-                
-            self.correct = self.check_conditionals(tree, new_block)
-            self.correct = self.check_loop(tree, new_block)
+
 
     def new_instruction_parser(self, tokens: list[str]) -> tuple[bool, Block | None]:
         keyword = 1
@@ -181,12 +178,8 @@ class RobotParser:
     def check_conditionals(self, tree: dict[Block, dict], block: Block | None) -> bool:
         if block.content_type == "if":
             first_child = list(tree[block])[-1]
-            print(first_child)
             if (len(tree[block]) != 3) or (first_child.content_type != 'conditional'):
                 return False
-            for child in tree[block]:
-                if child.content_type == "if":
-                    return self.check_conditionals(tree[block], child)
         return True
 
     def check_loop(self, tree: dict[Block, dict], block: Block | None) -> bool:
@@ -194,11 +187,23 @@ class RobotParser:
             first_child = list(tree[block])[-1]
             if (len(tree[block]) != 2) or (first_child.content_type != 'conditional'):
                 return False
-            for child in tree[block]:
-                if child.content_type == "loop":
-                    return self.check_loop(tree[block], child)
-                
         return True
+    
+    def check_conditionals_and_loops(self, tree: dict[Block, dict]) -> bool:
+        correct = True
+        for block in tree:
+            if (block.content_type == "if") and (correct):
+                correct = self.check_conditionals(tree, block)
+            if not correct:
+                break
+            elif (block.content_type == "loop") and (correct):
+                correct = self.check_loop(tree, block)
+            if not correct:
+                break
+            correct = self.check_conditionals_and_loops(tree[block])
+            if not correct:
+                break
+        return correct
     
     def is_defvar(self, word):
         if word == "DEFVAR":
