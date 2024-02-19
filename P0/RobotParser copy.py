@@ -49,40 +49,40 @@ class RobotParser:
             i = 1
             length = len(tokens)
             correct = True
-            block_coords = []
             while correct and (i < length) and (not block):
                 if tokens[i] == "(":
                     stack.append(i)
                 elif tokens[i] == ")":
                     start = stack.pop()
                     end = i
-                    block_coords.append((start, end))
+                # Bloque encontrado
                 if not stack:
-                    print(block_coords)
-                    tree = {}
-                    correct = self.new_block_parser(tokens, block_coords, tree)
-                    print(tree)
-                i += 1
-        return correct, block
+                    # crear nuevo bloque
+                    block = Block("block", tokens[start : end + 1])
+                    if tokens[start + 1] == "(":
+                        # Si empieza con parentesis, es un bloque anidado
+                        correct, child = self.parse(tokens[start + 1 : end])
+                        end = len(child.content) + start
+                        while (tokens[end + 1] == "(") and correct:
+                            correct, new_child = self.parse(tokens[end + 1 :])
+                            if correct:
+                                block.add_child(new_child)
+                                end = len(new_child.content) + end
 
-    def new_block_parser(
-        self, tokens: list[str], block_coords: list[tuple[int, int]], tree: dict
-    ) -> bool:
-        if block_coords:
-            coords = block_coords.pop()
-            start, end = coords
-            if tree:
-                for key in tree:
-                    if (start > key[0]) and (end < key[1]):
-                        tree[key][coords] = {}
-                        return self.new_block_parser(tokens, block_coords, tree[key])
+                        block.add_child(child)
+                        print(block.children)
+                    elif (
+                        tokens[start + 1] in INSTRUCTION_CREATORS
+                        or tokens[start + 1] in self.functionParser.functions
+                    ):
+                        correct, block = self.new_instruction_parser(
+                            tokens[start : end + 1]
+                        )
                     else:
-                        tree[coords] = {}
-                        return self.new_block_parser(tokens, block_coords, tree)
-            else:
-                tree[coords] = {}
-                return self.new_block_parser(tokens, block_coords, tree)
-        return tree
+                        correct = False
+                else:
+                    i += 1
+        return correct, block
 
     def new_instruction_parser(self, tokens: list[str]) -> tuple[bool, Block | None]:
         keyword = 1
@@ -203,7 +203,7 @@ def main():
                 else:
                     print("no")
                 # except:
-                # print("no")
+                    # print("no")
     except FileNotFoundError:
         print("No se encontró el archivo")
 
