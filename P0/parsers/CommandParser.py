@@ -20,8 +20,6 @@ class CommandParser:
         correct = False
         if (words[1] == "NULL") and (len(words) == 3):
             correct = True
-            command_type = words[1]
-            params = None
         elif words[3] == ')':
             if words[1] in ["MOVE", "SKIP"]:
                 if (

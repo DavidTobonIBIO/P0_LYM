@@ -1,3 +1,3 @@
-(
-    (if (blocked?) (move 1) (if (move 1) (null)))
-)
+(defun foo (c p)
+    (null))
+(foo 1 3)

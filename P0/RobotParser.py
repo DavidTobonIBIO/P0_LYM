@@ -63,7 +63,6 @@ class RobotParser:
                     start, end = coords
                     contents = tokens[start : end + 1]
                     new_block = Block(coords, 'block', contents)
-                    
                     parsing_answer = self.new_instruction_parser(contents)
                     if parsing_answer:
                         new_block.content_type = parsing_answer
@@ -72,26 +71,28 @@ class RobotParser:
 
                     if self.correct:
                         tree = {new_block : {}}
-                        self.new_block_parser(tokens, block_coords, tree)
+                        self.new_block_parser(tokens, block_coords, tree, new_block)
+                        print(tree)
                         if self.correct:
                             self.correct = self.check_conditionals_and_loops(tree)
                 i += 1
         return self.correct
 
 
-    def add_child(self, tokens, block: Block, tree: dict[Block, dict]):
+    def add_child(self, tokens, block: Block, tree: dict[Block, dict], father: Block | None = None):
         start, end = block.coords
         is_child = False
-        for k in tree:
-            s, e = k.coords
+        for key_block in tree:
+            s, e = key_block.coords
             if (start > s) and (end < e):
                 is_child = True
-                self.add_child(tokens, block, tree[k])
+                self.add_child(tokens, block, tree[key_block], key_block)
         if not is_child:
             tree[block] = {}
+            block.set_parent(father)
                 
     def new_block_parser(
-        self, tokens: list[str], block_coords: list[tuple[int, int]], tree: dict[Block, dict]
+        self, tokens: list[str], block_coords: list[tuple[int, int]], tree: dict[Block, dict], father: Block | None = None
     ) -> bool:
         if block_coords:
             coords = block_coords.pop()
@@ -106,14 +107,15 @@ class RobotParser:
                 self.correct = False
                         
             is_child = False
-            for key in tree:
-                s, e = key.coords
+            for key_block in tree:
+                s, e = key_block.coords
                 if (start > s) and (end < e):
                     is_child = True
-                    self.add_child(tokens, new_block, tree[key])
+                    self.add_child(tokens, new_block, tree[key_block], key_block)
             if not is_child:
                 tree[new_block] = {}
-            self.new_block_parser(tokens, block_coords, tree)
+                new_block.set_parent(father)
+            self.new_block_parser(tokens, block_coords, tree, new_block)
 
 
     def new_instruction_parser(self, tokens: list[str]) -> tuple[bool, Block | None]:
@@ -187,6 +189,11 @@ class RobotParser:
             first_child = list(tree[block])[-1]
             if (len(tree[block]) != 2) or (first_child.content_type != 'conditional'):
                 return False
+        return True
+    
+    def check_defun(self, tree: dict[Block, dict], block: Block | None) -> bool:
+        if block.content_type == "defun":
+            pass
         return True
     
     def check_conditionals_and_loops(self, tree: dict[Block, dict]) -> bool:

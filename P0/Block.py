@@ -13,7 +13,7 @@ class Block:
         self.parent = parent
         
     def __str__(self):
-        return f"(Block: {self.coords}, type: {self.content_type})"
+        return f"(Block: {self.coords}, type: {self.content_type}, father: {self.parent})"
     
     def __repr__(self):
-        return f"(Block: {self.coords},  type: {self.content_type})"
+        return f"(Block: {self.coords},  type: {self.content_type}, father: {self.parent})"
