@@ -53,6 +53,7 @@ MOVE_COMMANDS: set = {
     "MOVE-DIR",
     "MOVE-FACE",
     "RUN-DIRS",
+    "NULL",
 }
 
 CONDITIONALS: set = {

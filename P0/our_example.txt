@@ -1,7 +1,1 @@
-(
-    (move 1)
-    (move 2)
-    (
-        (move 3) (move 4) (move 5)
-    )
-)
+ (repeat Spaces (if (not (isZero? myChips)) (put :chips 1) (null)))

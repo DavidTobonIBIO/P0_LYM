@@ -1,4 +1,4 @@
-from instructions.Function import Function
+from Function import Function
 from constants import KEYWORDS, CONSTANTS
 
 class FunctionParser:
